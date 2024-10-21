@@ -65,7 +65,7 @@ GROUP BY ti.embarked
 HAVING ti.embarked != ''
 ORDER BY ti.embarked ASC;
 
---5) Средняя стоимость билетов по классам выживших пассажиров севших в каждом порту (4 join 5)
+--5) Средняя стоимость билетов по классам выживших пассажиров севших в каждом порту
 CREATE TABLE IF NOT EXISTS otus_task3.avg_fare_for_survived_by_embarked AS 
 SELECT 
 ti_1.embarked,
@@ -83,16 +83,5 @@ WHERE ti.survived = 1
 GROUP BY ti.embarked
 HAVING ti.embarked != ''
 ORDER BY ti.embarked ASC) as ti_1
-LEFT JOIN 
-(SELECT 
-ti.embarked,
-SUM(IF(ti.pclass = 1, 1, 0)) AS class_1,
-SUM(IF(ti.pclass = 2, 1,0)) AS class_2,
-SUM(IF(ti.pclass = 3, 1,0)) AS class_3
-FROM otus_task3.titanic AS ti
-WHERE ti.survived = 1
-GROUP BY ti.embarked
-HAVING ti.embarked != ''
-ORDER BY ti.embarked ASC
-) as ti_2 
+LEFT JOIN otus_task3.survived_by_embarked_for_pclass as ti_2 
 ON ti_1.embarked = ti_2.embarked;
